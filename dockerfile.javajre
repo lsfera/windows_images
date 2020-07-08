@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
+
+ENV JAVA_DOWNLOAD_URL 'http://javadl.oracle.com/webapps/download/AutoDL?BundleId=210185'
+
+RUN Write-Host ('Downloading {0} ...' -f $env:CASSANDRA_DOWNLOAD_URL); \ 
+    Start-BitsTransfer -Source $env:JAVA_DOWNLOAD_URL -Destination 'C:\jre-8u91-windows-x64.exe'; \
+    Start-process -filepath C:\jre-8u91-windows-x64.exe -passthru -wait -argumentlist "/s,INSTALLDIR=c:\Java\jre1.8.0_91,/L,install64.log"; \
+    del C:\jre-8u91-windows-x64.exe
+ENV JAVA_HOME C:\\Java\\jre1.8.0_91
